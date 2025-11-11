@@ -336,3 +336,6 @@ INSERT INTO Sugestao (texto, data, anonima, id_usuario, tipo_usuario) VALUES
 ('Mais promoções para clientes fiéis', CURRENT_DATE, FALSE, 4,'cliente'),
 ('Aumento no estoque de esmaltes', CURRENT_DATE, TRUE,  5,'cliente'),
 ('Incluir pagamento via boleto', CURRENT_DATE, FALSE, 6,'cliente');
+
+CREATE TABLE servico (id_servico SERIAL PRIMARY KEY, nome VARCHAR(100) NOT NULL, preco DECIMAL(10,2) NOT NULL);
+
