@@ -1,4 +1,15 @@
+--Script do Banco
+
+--1-Criação do Banco:
+
+--1.1-Criação do banco de dados:
+
 CREATE DATABASE EsmalteriaDB;
+
+--1.2-Acessando o banco:
+\c esmalteriadb
+
+--1.3-Usuários do sistema:
 
 CREATE TABLE Usuario (
     id_usuario  SERIAL PRIMARY KEY,
@@ -11,6 +22,7 @@ CREATE TABLE Usuario (
         CHECK (tipo_usuario IN ('cliente','funcionario','administrador')) NOT NULL
 );
 
+--1.4-Clientes:
 
 CREATE TABLE Cliente (
     id_usuario        INT PRIMARY KEY,
@@ -18,7 +30,7 @@ CREATE TABLE Cliente (
     FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
 );
 
-
+--1.5-Funcionários:
 
 CREATE TABLE Funcionario (
     id_usuario      INT PRIMARY KEY,
@@ -31,13 +43,14 @@ CREATE TABLE Funcionario (
     FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
 );
 
+--1.6-Administradores:
 
 CREATE TABLE Administrador (
     id_usuario INT PRIMARY KEY,
     FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
 );
 
-
+--1.7-Tratamentos:
 
 CREATE TABLE Tratamento (
     id_tratamento SERIAL PRIMARY KEY,
@@ -46,7 +59,7 @@ CREATE TABLE Tratamento (
     preco         DECIMAL(10,2) NOT NULL
 );
 
-
+--1.8-Produtos:
 
 CREATE TABLE Produto (
     id_produto        SERIAL PRIMARY KEY,
@@ -59,7 +72,7 @@ CREATE TABLE Produto (
     nota_fiscal       VARCHAR(50)
 );
 
-
+--1.9-Agendamentos:
 
 CREATE TABLE Agendamento (
     id_agendamento SERIAL PRIMARY KEY,
@@ -75,7 +88,7 @@ CREATE TABLE Agendamento (
     FOREIGN KEY (id_tratamento)  REFERENCES Tratamento(id_tratamento)
 );
 
-
+--1.10-Pagamentos:
 
 CREATE TABLE Pagamento (
     id_pagamento   SERIAL PRIMARY KEY,
@@ -101,7 +114,7 @@ CREATE TABLE Pagamento (
     FOREIGN KEY (id_funcionario) REFERENCES Funcionario(id_usuario)
 );
 
-
+--1.11-Avaliações:
 
 CREATE TABLE Avaliacao (
     id_avaliacao  SERIAL PRIMARY KEY,
@@ -114,7 +127,7 @@ CREATE TABLE Avaliacao (
     FOREIGN KEY (id_funcionario) REFERENCES Funcionario(id_usuario)
 );
 
-
+--1.12-Reservas de Produtos:
 
 CREATE TABLE ReservaProduto (
     id_reserva   SERIAL PRIMARY KEY,
@@ -127,7 +140,7 @@ CREATE TABLE ReservaProduto (
     FOREIGN KEY (id_produto) REFERENCES Produto(id_produto)
 );
 
-
+--1.13-Histórico:
 
 CREATE TABLE Historico (
     id_historico       SERIAL PRIMARY KEY,
@@ -139,7 +152,7 @@ CREATE TABLE Historico (
     FOREIGN KEY (id_agendamento) REFERENCES Agendamento(id_agendamento)
 );
 
-
+--1.14-Sugestões:
 
 CREATE TABLE Sugestao (
     id_sugestao SERIAL PRIMARY KEY,
@@ -152,6 +165,9 @@ CREATE TABLE Sugestao (
     FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
 );
 
+--2-População do Banco:
+
+--2.1 - Populando Usuario (30 usuários: 10 clientes, 10 funcionários, 10 administradores)
 
 INSERT INTO Usuario (nome, email, telefone, cep, senha, tipo_usuario) VALUES
 ('cliente1',  'cliente1@gmail.com', '11111111111', '01001-000', 'senha123', 'cliente'),
@@ -187,9 +203,12 @@ INSERT INTO Usuario (nome, email, telefone, cep, senha, tipo_usuario) VALUES
 ('Admin Geral9',  'admin9@salao.com',  '31111111119', '03003-008', 'admin123', 'administrador'),
 ('Admin Geral10', 'admin10@salao.com', '31111111120', '03003-009', 'admin123', 'administrador');
 
+--2.2 - Populando Cliente (ids 1-10)
+
 INSERT INTO Cliente (id_usuario, pontos_fidelidade) VALUES
 (1,120),(2,60),(3,30),(4,40),(5,50),(6,70),(7,80),(8,90),(9,100),(10,110);
 
+--2.3 - Populando Funcionario (ids 11-20)
 
 INSERT INTO Funcionario (id_usuario, cpf, data_nascimento, area_atuacao, status, avaliacao_media) VALUES
 (11,'123.456.789-01','1990-05-20','Manicure', 'ativo',4.60),
@@ -203,9 +222,12 @@ INSERT INTO Funcionario (id_usuario, cpf, data_nascimento, area_atuacao, status,
 (19,'147.258.369-09','1990-08-18','Cabeleireiro', 'ativo',4.60),
 (20,'369.258.147-10','1994-04-22','Esteticista', 'ativo',4.70);
 
+--2.4 - Populando Administrador (ids 21-30)
 
 INSERT INTO Administrador (id_usuario) VALUES
 (21),(22),(23),(24),(25),(26),(27),(28),(29),(30);
+
+--2.5 - Populando Tratamento (10 tratamentos)
 
 INSERT INTO Tratamento (nome, descricao, preco) VALUES
 ('Corte de Cabelo', 'Corte masculino ou feminino', 50.00),
@@ -219,6 +241,7 @@ INSERT INTO Tratamento (nome, descricao, preco) VALUES
 ('Penteado', 'Penteados para ocasiões especiais', 90.00),
 ('Limpeza de Pele', 'Limpeza profunda da pele do rosto', 55.00);
 
+--2.6 - Populando Produto (10 produtos)
 
 INSERT INTO Produto (nome, marca, descricao, preco, quantidade_estoque, data_inclusao, nota_fiscal) VALUES
 ('Esmalte Vermelho', 'Colorama', 'Esmalte vermelho vivo', 8.99, 15, CURRENT_DATE, 'NF12345'),
@@ -232,6 +255,7 @@ INSERT INTO Produto (nome, marca, descricao, preco, quantidade_estoque, data_inc
 ('Pincel para Sobrancelha','MAC', 'Precisão e maciez', 30.00, 22, CURRENT_DATE, 'NF12353'),
 ('Removedor de Maquiagem','L’Oréal', 'Remove maquiagem facilmente', 18.00, 17, CURRENT_DATE, 'NF12354');
 
+--2.7 - Populando Agendamento (10 agendamentos)
 
 INSERT INTO Agendamento (data, hora, status, id_cliente, id_funcionario, id_tratamento) VALUES
 ('2025-07-21','09:00:00','realizado', 1, 11, 2),
@@ -245,6 +269,7 @@ INSERT INTO Agendamento (data, hora, status, id_cliente, id_funcionario, id_trat
 ('2025-07-25','11:30:00','realizado', 9, 19, 9),
 ('2025-07-25','12:30:00','pendente', 10, 20,10);
 
+--2.8 - Populando Pagamento (10 pagamentos)
 
 INSERT INTO Pagamento (tipo_pagamento, valor, data, id_agendamento, id_cliente, id_funcionario) VALUES
 ('cartao', 35.00,'2025-07-21', 1,  1,11),
@@ -258,6 +283,7 @@ INSERT INTO Pagamento (tipo_pagamento, valor, data, id_agendamento, id_cliente, 
 ('dinheiro', 75.00,'2025-07-25', 9,  9,19),
 ('cartao', 80.00,'2025-07-25',10, 10,20);
 
+--2.9 - Populando Avaliacao (10 avaliações)
 
 INSERT INTO Avaliacao (nota, comentario, data, id_cliente, id_funcionario) VALUES
 (5,'Excelente atendimento!', '2025-07-21', 1,11),
@@ -271,6 +297,7 @@ INSERT INTO Avaliacao (nota, comentario, data, id_cliente, id_funcionario) VALUE
 (5,'Satisfeita com o serviço.', '2025-07-25', 9,19),
 (4,'Bom atendimento.', '2025-07-25',10,20);
 
+--2.10 - Populando ReservaProduto (12 reservas)
 
 INSERT INTO ReservaProduto (data_reserva, status, id_cliente, id_produto) VALUES
 ('2025-07-20','pendente',   1, 1),
@@ -286,6 +313,7 @@ INSERT INTO ReservaProduto (data_reserva, status, id_cliente, id_produto) VALUES
 ('2025-07-25','pendente',   1, 2),
 ('2025-07-25','confirmado', 2, 3);
 
+--2.11 - Populando Historico (10 históricos)
 
 INSERT INTO Historico (id_agendamento, valor_pago, porcent_funcionario, porcent_salao) VALUES
 (1, 35.00, 70,30),
@@ -299,6 +327,7 @@ INSERT INTO Historico (id_agendamento, valor_pago, porcent_funcionario, porcent_
 (9, 75.00, 65,35),
 (10,80.00, 60,40);
 
+--2.12 - Populando Sugestao (6 sugestões)
 
 INSERT INTO Sugestao (texto, data, anonima, id_usuario, tipo_usuario) VALUES
 ('Adicionar mais horários no sábado', CURRENT_DATE, TRUE,  1,'cliente'),
@@ -307,4 +336,3 @@ INSERT INTO Sugestao (texto, data, anonima, id_usuario, tipo_usuario) VALUES
 ('Mais promoções para clientes fiéis', CURRENT_DATE, FALSE, 4,'cliente'),
 ('Aumento no estoque de esmaltes', CURRENT_DATE, TRUE,  5,'cliente'),
 ('Incluir pagamento via boleto', CURRENT_DATE, FALSE, 6,'cliente');
-
