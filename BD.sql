@@ -337,8 +337,6 @@ INSERT INTO Sugestao (texto, data, anonima, id_usuario, tipo_usuario) VALUES
 ('Aumento no estoque de esmaltes', CURRENT_DATE, TRUE,  5,'cliente'),
 ('Incluir pagamento via boleto', CURRENT_DATE, FALSE, 6,'cliente');
 
-CREATE TABLE servico (id_servico SERIAL PRIMARY KEY, nome VARCHAR(100) NOT NULL, preco DECIMAL(10,2) NOT NULL);
-
  --3 - Consultas, listagens, buscas, relatórios
 
 --3.1 - Listagens (7 listagens)
