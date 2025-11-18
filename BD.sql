@@ -339,3 +339,76 @@ INSERT INTO Sugestao (texto, data, anonima, id_usuario, tipo_usuario) VALUES
 
 CREATE TABLE servico (id_servico SERIAL PRIMARY KEY, nome VARCHAR(100) NOT NULL, preco DECIMAL(10,2) NOT NULL);
 
+ --3 - Consultas, listagens, buscas, relatórios
+
+--3.1 - Listagens (7 listagens)
+
+SELECT * FROM Usuario;
+
+SELECT * FROM Cliente;
+
+SELECT * FROM Funcionario;
+
+SELECT * FROM Servico;
+
+SELECT * FROM Produto;
+
+SELECT * FROM Agendamento;
+
+SELECT * FROM Pagamento;
+
+SELECT Agendamento.*, Usuario.nome
+FROM Agendamento
+JOIN Funcionario ON Funcionario.id = Agendamento.id_funcionario
+JOIN Usuario ON Usuario.id = Funcionario.id_usuario
+WHERE Funcionario.id = 1;
+
+--3.2 - Buscas (3 buscas)
+
+SELECT * FROM Usuario WHERE nome LIKE '%ana%';
+
+SELECT * FROM Servico WHERE nome LIKE '%manicure%';
+
+SELECT * FROM Produto WHERE estoque < 10;
+
+--3.3 - Relatórios (4 relatórios)
+
+--Relatório de agendamentos com cliente e serviço
+SELECT 
+    Agendamento.id,
+    Usuario.nome AS cliente,
+    Servico.nome AS servico,
+    Agendamento.data_hora,
+    Agendamento.status
+FROM Agendamento
+JOIN Cliente ON Cliente.id = Agendamento.id_cliente
+JOIN Usuario ON Usuario.id = Cliente.id_usuario
+JOIN Servico ON Servico.id = Agendamento.id_servico;
+
+--Relatório de vendas
+SELECT 
+    Pagamento.id,
+    Pagamento.valor,
+    Pagamento.forma_pagamento,
+    Pagamento.data_pagamento,
+    Servico.nome AS servico
+FROM Pagamento
+JOIN Agendamento ON Agendamento.id = Pagamento.id_agendamento
+JOIN Servico ON Servico.id = Agendamento.id_servico;
+
+--Todas as reservas por produto
+SELECT Produto.nome, SUM(ReservaProduto.quantidade) AS total_reservado
+FROM ReservaProduto
+JOIN Produto ON Produto.id = ReservaProduto.id_produto
+GROUP BY Produto.nome;
+
+--Média de notas do funcionário
+SELECT 
+    Usuario.nome AS funcionario,
+    AVG(Avaliacao.nota) AS media
+FROM Avaliacao
+JOIN Funcionario ON Funcionario.id = Avaliacao.id_funcionario
+JOIN Usuario ON Usuario.id = Funcionario.id_usuario
+GROUP BY Usuario.nome;
+
+
