@@ -408,4 +408,68 @@ JOIN Funcionario f ON f.id_usuario = a.id_funcionario
 JOIN Usuario u ON u.id_usuario = f.id_usuario
 GROUP BY u.nome;
 
+--4 - Deletes (6 deletes)
+
+DELETE FROM Usuario
+WHERE id_usuario = 10;
+
+DELETE FROM Cliente
+WHERE id_usuario = 5;
+
+DELETE FROM Agendamento
+WHERE id_agendamento = 7;
+
+DELETE FROM Produto
+WHERE id_produto = 12;
+
+DELETE FROM Historico
+WHERE id_historico = 6;
+
+DELETE FROM Sugestao
+WHERE id_sugestao = 3;
+
+-- 5 - Updates
+
+UPDATE Usuario
+SET nome = 'Ana Oliveira', email = 'ana@gmail.com'
+WHERE id_usuario = 10;
+
+UPDATE Cliente
+SET pontos_fidelidade = 50
+WHERE id_usuario = 5;
+
+UPDATE Funcionario
+SET status = 'ativo', avaliacao_media = 4.7
+WHERE id_usuario = 3;
+
+UPDATE Tratamento
+SET preco = 79.90, descricao = 'Tratamento completo com hidratação'
+WHERE id_tratamento = 2;
+
+UPDATE Produto
+SET quantidade_estoque = 120, preco = 19.90, marca = 'NailPro'
+WHERE id_produto = 8;
+
+UPDATE Agendamento
+SET status = 'realizado', hora = '15:30'
+WHERE id_agendamento = 4;
+
+UPDATE Pagamento
+SET valor = 150.00, tipo_pagamento = 'pix'
+WHERE id_pagamento = 6;
+
+UPDATE Avaliacao
+SET nota = 5, comentario = 'Excelente atendimento!'
+WHERE id_avaliacao = 2;
+
+UPDATE ReservaProduto
+SET status = 'confirmado'
+WHERE id_reserva = 9;
+
+UPDATE Sugestao
+SET texto = 'Adicionar opção de massagem rápida', anonima = FALSE
+WHERE id_sugestao = 3;
+
+
+
 
