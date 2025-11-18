@@ -355,58 +355,57 @@ SELECT * FROM Agendamento;
 
 SELECT * FROM Pagamento;
 
-SELECT Agendamento.*, Usuario.nome
-FROM Agendamento
-JOIN Funcionario ON Funcionario.id = Agendamento.id_funcionario
-JOIN Usuario ON Usuario.id = Funcionario.id_usuario
-WHERE Funcionario.id = 1;
-
 --3.2 - Buscas (3 buscas)
 
-SELECT * FROM Usuario WHERE nome LIKE '%ana%';
+SELECT * FROM Usuario WHERE nome LIKE '%Ana%';
 
-SELECT * FROM Servico WHERE nome LIKE '%manicure%';
+SELECT * FROM Tratamento WHERE nome LIKE '%Manicure%';
 
-SELECT * FROM Produto WHERE estoque < 10;
+SELECT * FROM Produto WHERE quantidade_estoque < 10;
 
 --3.3 - Relatórios (4 relatórios)
 
 --Relatório de agendamentos com cliente e serviço
 SELECT 
-    Agendamento.id,
-    Usuario.nome AS cliente,
-    Servico.nome AS servico,
-    Agendamento.data_hora,
-    Agendamento.status
-FROM Agendamento
-JOIN Cliente ON Cliente.id = Agendamento.id_cliente
-JOIN Usuario ON Usuario.id = Cliente.id_usuario
-JOIN Servico ON Servico.id = Agendamento.id_servico;
+  a.id_agendamento,
+  u.nome AS cliente,
+  t.nome AS servico,
+  a.data,
+  a.hora,
+  a.status
+FROM Agendamento a
+JOIN Usuario u ON u.id_usuario = a.id_cliente
+JOIN Tratamento t ON t.id_tratamento = a.id_tratamento;
+
 
 --Relatório de vendas
-SELECT 
-    Pagamento.id,
-    Pagamento.valor,
-    Pagamento.forma_pagamento,
-    Pagamento.data_pagamento,
-    Servico.nome AS servico
-FROM Pagamento
-JOIN Agendamento ON Agendamento.id = Pagamento.id_agendamento
-JOIN Servico ON Servico.id = Agendamento.id_servico;
+SELECT
+    p.id_pagamento,
+    p.valor,
+    p.tipo_pagamento,
+    p.data,
+    t.nome AS tratamento
+FROM Pagamento p
+JOIN Agendamento a ON a.id_agendamento = p.id_agendamento
+JOIN Tratamento t ON t.id_tratamento = a.id_tratamento;
+
 
 --Todas as reservas por produto
-SELECT Produto.nome, SUM(ReservaProduto.quantidade) AS total_reservado
-FROM ReservaProduto
-JOIN Produto ON Produto.id = ReservaProduto.id_produto
-GROUP BY Produto.nome;
+SELECT 
+    p.nome,
+    COUNT(rp.id_reserva) AS total_reservado
+FROM ReservaProduto rp
+JOIN Produto p ON p.id_produto = rp.id_produto
+GROUP BY p.nome;
+
 
 --Média de notas do funcionário
 SELECT 
-    Usuario.nome AS funcionario,
-    AVG(Avaliacao.nota) AS media
-FROM Avaliacao
-JOIN Funcionario ON Funcionario.id = Avaliacao.id_funcionario
-JOIN Usuario ON Usuario.id = Funcionario.id_usuario
-GROUP BY Usuario.nome;
+    u.nome AS funcionario,
+    AVG(a.nota) AS media
+FROM Avaliacao a
+JOIN Funcionario f ON f.id_usuario = a.id_funcionario
+JOIN Usuario u ON u.id_usuario = f.id_usuario
+GROUP BY u.nome;
 
 
